@@ -48,6 +48,10 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "ui/boxes/confirm_box.h"
 #include "ui/chat/chat_theme.h"
 #include "ui/controls/swipe_handler.h"
+#include "ui/widgets/buttons.h"
+#include "ui/widgets/checkbox.h"
+#include "ui/wrap/slide_wrap.h"
+#include "boxes/generic_box.h"
 #include "ui/controls/userpic_button.h"
 #include "ui/effects/snowflakes.h"
 #include "ui/effects/toggle_arrow.h"
@@ -782,6 +786,103 @@ void MainMenu::setupMenu() {
 			_nightThemeSwitches.fire_copy(*darkMode);
 		}
 	}, _nightThemeToggle->lifetime());
+
+	_ghostModeToggle = addAction(
+		tr::lng_menu_ghost_mode(),
+		{ &st::menuIconMute }
+	)->toggleOn(
+		controller->session().settings().ghostModeEnabledValue()
+	);
+	_ghostModeToggle->setClickedCallback([=] {
+		controller->show(Box([=](not_null<Ui::GenericBox*> box) {
+			box->setTitle(tr::lng_ghost_mode_title());
+			box->setWidth(st::boxWideWidth);
+			
+			const auto container = box->verticalLayout();
+			
+			Ui::AddSubsectionTitle(
+				container,
+				rpl::single(u"Privacy Settings"_q));
+			
+			const auto addToggle = [&](
+					rpl::producer<QString> text,
+					bool value,
+					auto callback) {
+				const auto button = container->add(
+					object_ptr<Ui::SettingsButton>(
+						container,
+						std::move(text),
+						st::settingsButton));
+				const auto toggle = Ui::CreateChild<Ui::ToggleView>(
+					button,
+					value);
+				button->toggleOn(rpl::single(value));
+				button->setClickedCallback([=] {
+					const auto newValue = !toggle->toggled();
+					toggle->setToggled(newValue, anim::type::normal);
+					callback(newValue);
+				});
+				return button;
+			};
+			
+			addToggle(
+				tr::lng_ghost_mode_no_read_messages(),
+				controller->session().settings().ghostModeNoReadMessages(),
+				[=](bool enabled) {
+					controller->session().settings().setGhostModeNoReadMessages(enabled);
+					controller->session().saveSettings();
+				});
+			
+			addToggle(
+				tr::lng_ghost_mode_no_read_stories(),
+				controller->session().settings().ghostModeNoReadStories(),
+				[=](bool enabled) {
+					controller->session().settings().setGhostModeNoReadStories(enabled);
+					controller->session().saveSettings();
+				});
+			
+			addToggle(
+				tr::lng_ghost_mode_no_online(),
+				controller->session().settings().ghostModeNoOnline(),
+				[=](bool enabled) {
+					controller->session().settings().setGhostModeNoOnline(enabled);
+					controller->session().saveSettings();
+				});
+			
+			addToggle(
+				tr::lng_ghost_mode_no_typing(),
+				controller->session().settings().ghostModeNoTyping(),
+				[=](bool enabled) {
+					controller->session().settings().setGhostModeNoTyping(enabled);
+					controller->session().saveSettings();
+				});
+			
+			addToggle(
+				tr::lng_ghost_mode_auto_offline(),
+				controller->session().settings().ghostModeAutoOffline(),
+				[=](bool enabled) {
+					controller->session().settings().setGhostModeAutoOffline(enabled);
+					controller->session().saveSettings();
+				});
+			
+			Ui::AddSkip(container);
+			Ui::AddDividerText(
+				container,
+				tr::lng_ghost_mode_description());
+			
+			box->addButton(tr::lng_close(), [=] { box->closeBox(); });
+		}));
+	});
+	_ghostModeToggle->toggledChanges(
+	) | rpl::on_next([=](bool enabled) {
+		controller->session().settings().setGhostModeEnabled(enabled);
+		controller->session().saveSettings();
+		if (enabled) {
+			controller->showToast(tr::lng_ghost_mode_activated(tr::now));
+		} else {
+			controller->showToast(tr::lng_ghost_mode_deactivated(tr::now));
+		}
+	}, _ghostModeToggle->lifetime());
 }
 
 void MainMenu::resizeEvent(QResizeEvent *e) {

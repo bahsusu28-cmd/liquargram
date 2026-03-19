@@ -187,6 +187,51 @@ public:
 		return _moderateCommonGroups;
 	}
 
+	void setGhostModeEnabled(bool enabled) {
+		_ghostModeEnabled = enabled;
+	}
+	[[nodiscard]] bool ghostModeEnabled() const {
+		return _ghostModeEnabled;
+	}
+	[[nodiscard]] rpl::producer<bool> ghostModeEnabledValue() const {
+		return _ghostModeEnabled.value();
+	}
+
+	void setGhostModeNoReadMessages(bool enabled) {
+		_ghostModeNoReadMessages = enabled;
+	}
+	[[nodiscard]] bool ghostModeNoReadMessages() const {
+		return _ghostModeNoReadMessages;
+	}
+
+	void setGhostModeNoReadStories(bool enabled) {
+		_ghostModeNoReadStories = enabled;
+	}
+	[[nodiscard]] bool ghostModeNoReadStories() const {
+		return _ghostModeNoReadStories;
+	}
+
+	void setGhostModeNoOnline(bool enabled) {
+		_ghostModeNoOnline = enabled;
+	}
+	[[nodiscard]] bool ghostModeNoOnline() const {
+		return _ghostModeNoOnline;
+	}
+
+	void setGhostModeNoTyping(bool enabled) {
+		_ghostModeNoTyping = enabled;
+	}
+	[[nodiscard]] bool ghostModeNoTyping() const {
+		return _ghostModeNoTyping;
+	}
+
+	void setGhostModeAutoOffline(bool enabled) {
+		_ghostModeAutoOffline = enabled;
+	}
+	[[nodiscard]] bool ghostModeAutoOffline() const {
+		return _ghostModeAutoOffline;
+	}
+
 private:
 	static constexpr auto kDefaultSupportChatsLimitSlice = 7 * 24 * 60 * 60;
 	static constexpr auto kPhotoEditorHintMaxShowsCount = 5;
@@ -236,6 +281,13 @@ private:
 	Data::SetupEmailState _setupEmailState;
 
 	std::vector<int32> _moderateCommonGroups;
+
+	rpl::variable<bool> _ghostModeEnabled = false;
+	bool _ghostModeNoReadMessages = true;
+	bool _ghostModeNoReadStories = true;
+	bool _ghostModeNoOnline = true;
+	bool _ghostModeNoTyping = true;
+	bool _ghostModeAutoOffline = true;
 
 };
 

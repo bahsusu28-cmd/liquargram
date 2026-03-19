@@ -7744,3 +7744,14 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 "lng_sr_close_panel" = "Close panel";
 
 // Keys finished
+
+"lng_menu_ghost_mode" = "Ghost Mode";
+"lng_ghost_mode_title" = "Ghost Mode";
+"lng_ghost_mode_no_read_messages" = "Don't read messages";
+"lng_ghost_mode_no_read_stories" = "Don't read stories";
+"lng_ghost_mode_no_online" = "Don't send \"online\"";
+"lng_ghost_mode_no_typing" = "Don't send \"typing\"";
+"lng_ghost_mode_auto_offline" = "Automatic \"offline\"";
+"lng_ghost_mode_description" = "Ghost mode hides your activity from other users. Enable the options you need for maximum privacy.";
+"lng_ghost_mode_activated" = "👻 Ghost mode activated";
+"lng_ghost_mode_deactivated" = "Ghost mode deactivated";
