@@ -36,18 +36,27 @@ jobs:
     - name: Build Dependencies
       shell: cmd
       run: |
-        cd Telegram\build
-        python configure.py -D DESKTOP_APP_USE_PACKAGED=OFF
+        cd Telegram\build\prepare
+        call win.bat
+      continue-on-error: false
+      timeout-minutes: 120
+        
+    - name: Configure Project
+      shell: cmd
+      run: |
+        cd Telegram
+        python configure.py x64 -D TDESKTOP_API_ID=94575 -D TDESKTOP_API_HASH=a3406de8d171bb422bb6ddf3bbd800e2
         
     - name: Build Liquargram
       shell: cmd
       run: |
+        cd Telegram
         cmake --build out --config Release --target Telegram
         
     - name: Package
       run: |
         mkdir release
-        copy out\Release\Telegram.exe release\Liquargram.exe
+        copy Telegram\out\Release\Telegram.exe release\Liquargram.exe
         
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
