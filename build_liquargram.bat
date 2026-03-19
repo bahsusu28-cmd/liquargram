@@ -18,20 +18,16 @@ echo.
 
 REM Check if dependencies are built
 if not exist "..\win64\Libraries" (
-    echo [2/4] Building dependencies (this will take 1-2 hours)...
-    echo This only needs to be done once!
-    cd Telegram\build\prepare
-    call win.bat
-    if errorlevel 1 (
-        echo ERROR: Failed to build dependencies
-        cd ..\..\..
-        pause
-        exit /b 1
-    )
-    cd ..\..\..
-    echo Dependencies built successfully!
+    echo [2/4] Dependencies not found!
+    echo.
+    echo Please run setup_dependencies.bat first to:
+    echo - Download prebuilt dependencies (FAST)
+    echo - OR build from source (SLOW)
+    echo.
+    pause
+    exit /b 1
 ) else (
-    echo [2/4] Dependencies already built, skipping...
+    echo [2/4] Dependencies found, continuing...
 )
 echo.
 

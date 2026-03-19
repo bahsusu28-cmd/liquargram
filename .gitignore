@@ -1,5 +1,4 @@
 out/
-build/
 *.user
 *.suo
 *.sdf
@@ -15,3 +14,13 @@ build/
 release/
 artifacts/
 node_modules/
+dist/
+Telegram/out/
+ThirdParty/
+Libraries/
+win64/
+*.zip
+*.tar.gz
+*.cache
+CMakeCache.txt
+CMakeFiles/

@@ -1,62 +1,45 @@
 ╔══════════════════════════════════════════════════════════════╗
-║           LIQUARGRAM - ИНСТРУКЦИЯ ПО СБОРКЕ                  ║
+║           LIQUARGRAM - БЫСТРАЯ СБОРКА                        ║
 ╚══════════════════════════════════════════════════════════════╝
 
-📋 ЧТО НУЖНО:
-✓ Python (установлен)
-✓ Git (установлен)  
-✓ Visual Studio 2022 (установлен)
+⚡ САМЫЙ БЫСТРЫЙ СПОСОБ (5-10 минут):
 
-🚀 ПЕРВАЯ СБОРКА (займет 1-2 часа):
+1. Запусти quick_build.bat
+   → Попробует скачать готовые зависимости
+   → Если не получится, соберет сам
+   → Соберет Liquargram
 
-1. Запусти build_liquargram.bat
-2. Жди пока соберутся зависимости (Qt, FFmpeg и т.д.)
-3. Получишь готовый Telegram\out\Debug\Telegram.exe
+🎯 РЕКОМЕНДУЕМЫЙ СПОСОБ:
 
-⚡ БЫСТРАЯ ПЕРЕСБОРКА (после изменений):
+1. setup_dependencies.bat (один раз)
+   → Выбери вариант 1 (скачать готовые)
+   → Или вариант 2 (собрать самому)
+   
+2. build_liquargram.bat
+   → Соберет Liquargram за 5-10 минут
 
-1. Запусти rebuild_liquargram.bat
-2. Займет 2-5 минут
+⚡ ПОСЛЕ ИЗМЕНЕНИЙ В КОДЕ:
+
+rebuild_liquargram.bat (2-5 минут)
 
 ▶️ ЗАПУСК:
 
-Запусти run_liquargram.bat или напрямую:
-Telegram\out\Debug\Telegram.exe
-
-📁 СТРУКТУРА ПРОЕКТА:
-
-L:\Telegram\liquargram\          ← ты тут
-L:\Telegram\win64\Libraries\     ← зависимости (создастся автоматически)
-
-⚠️ ВАЖНО:
-
-- Перед пересборкой ЗАКРЫВАЙ Telegram.exe
-- Debug сборка для разработки (быстрая)
-- Release сборка для релиза (медленная, оптимизированная)
-
-🔧 РУЧНАЯ СБОРКА:
-
-Если нужно собрать вручную:
-
-1. Открой "x64 Native Tools Command Prompt for VS 2022"
-2. cd C:\Users\Blane\Desktop\liquargram
-3. cd Telegram\build\prepare
-4. win.bat (только первый раз)
-5. cd ..\..
-6. python configure.py x64
-7. cmake --build out --config Debug --target Telegram
-
-🐛 ПРОБЛЕМЫ:
-
-"cannot open program database" / "cannot open Telegram.exe"
-→ Закрой Telegram.exe и попробуй снова
-
-"Libraries not found"
-→ Запусти Telegram\build\prepare\win.bat
-
-"Qt not found"  
-→ Подожди пока соберутся зависимости
+run_liquargram.bat
 
 ═══════════════════════════════════════════════════════════════
 
-💡 СОВЕТ: Используй rebuild_liquargram.bat для быстрой пересборки!
+📋 ЧТО УСТАНОВЛЕНО:
+✓ Python 3.14.2
+✓ Git 2.45.1
+✓ Visual Studio 2022
+
+🔧 ЕСЛИ ЕСТЬ TELEGRAM DESKTOP:
+
+Если у тебя уже собран оригинальный Telegram Desktop,
+можешь использовать его зависимости:
+
+setup_dependencies.bat → выбери вариант 3
+
+═══════════════════════════════════════════════════════════════
+
+💡 СОВЕТ: Начни с quick_build.bat - он все сделает автоматически!
