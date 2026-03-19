@@ -1,0 +1,48 @@
+name: Build Dependencies Only
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-deps:
+    runs-on: windows-latest
+    timeout-minutes: 360
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
+        
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Restore Dependencies Cache
+      id: cache-deps
+      uses: actions/cache@v4
+      with:
+        path: |
+          ../Libraries
+          ../win64/Libraries
+          ../ThirdParty
+        key: tdesktop-deps-${{ hashFiles('Telegram/build/prepare/win.bat') }}
+        
+    - name: Build Dependencies
+      if: steps.cache-deps.outputs.cache-hit != 'true'
+      shell: cmd
+      run: |
+        cd Telegram\build\prepare
+        call win.bat
+        
+    - name: Verify Dependencies
+      shell: cmd
+      run: |
+        dir ..\win64\Libraries
+        echo Dependencies built successfully!

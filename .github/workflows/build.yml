@@ -6,6 +6,7 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+    timeout-minutes: 60
     
     steps:
     - name: Checkout
@@ -23,28 +24,15 @@ jobs:
       with:
         python-version: '3.11'
         
-    - name: Cache Dependencies
+    - name: Restore Dependencies Cache
       uses: actions/cache@v4
       with:
         path: |
           ../Libraries
           ../win64/Libraries
-        key: ${{ runner.os }}-deps-${{ hashFiles('**/CMakeLists.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-deps-
-          
-    - name: Setup vcpkg
-      uses: lukka/run-vcpkg@v11
-      with:
-        vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
-        
-    - name: Install Dependencies via vcpkg
-      shell: cmd
-      run: |
-        vcpkg install --triplet x64-windows-static ^
-          zlib openssl opus libvpx libjpeg-turbo ^
-          ffmpeg[core,avcodec,avformat,avutil,swresample,swscale] ^
-          openal-soft minizip lz4 xxhash rnnoise
+          ../ThirdParty
+        key: tdesktop-deps-${{ hashFiles('Telegram/build/prepare/win.bat') }}
+        fail-on-cache-miss: true
         
     - name: Configure Project
       shell: cmd
@@ -52,10 +40,7 @@ jobs:
         cd Telegram
         python configure.py x64 ^
           -D TDESKTOP_API_ID=94575 ^
-          -D TDESKTOP_API_HASH=a3406de8d171bb422bb6ddf3bbd800e2 ^
-          -D DESKTOP_APP_USE_PACKAGED=ON ^
-          -D CMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake ^
-          -D VCPKG_TARGET_TRIPLET=x64-windows-static
+          -D TDESKTOP_API_HASH=a3406de8d171bb422bb6ddf3bbd800e2
         
     - name: Build Liquargram
       shell: cmd
