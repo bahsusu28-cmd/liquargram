@@ -1,0 +1,16 @@
+name: Cancel Old Workflows
+
+on:
+  workflow_run:
+    workflows: ["Build Liquargram Windows"]
+    types:
+      - requested
+
+jobs:
+  cancel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          access_token: ${{ github.token }}
